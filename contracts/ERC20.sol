@@ -64,6 +64,7 @@ contract ERC20 is AccessControl {
         balances[to]+=value;
         balances[from]-=value;
         allowances[from][msg.sender]-=value;
+        emit Transfer(from, to, value);
         return true;
     }
 
@@ -80,7 +81,7 @@ contract ERC20 is AccessControl {
     event Transfer(address indexed from, address indexed to, uint256 value);
     event Approval(address indexed owner, address indexed spender, uint256 value);
 
-    function burn(address account, uint256 amount) public onlyRole(MINTER_ROLE) enoughTokens(account, amount){
+    function burn(address account, uint256 amount) public onlyRole(BURNER_ROLE) enoughTokens(account, amount){
         balances[account]-=amount;
         _totalSupply-=amount;
         emit Transfer(account, address(0), amount);
