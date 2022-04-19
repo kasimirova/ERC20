@@ -15,9 +15,9 @@ describe("ERC20", function () {
   });
 
   it("Transfer tokens", async function () {
-    await ERC_20.transfer(addr1.address, ethers.utils.parseEther("1000"));
+    await ERC_20.connect(owner).transfer(addr1.address, ethers.utils.parseEther("1000"));
     expect(await ERC_20.balanceOf(addr1.address)).to.equal(ethers.utils.parseEther("1000"));
-    await ERC_20.transfer(addr2.address, ethers.utils.parseEther("500"));
+    await ERC_20.connect(owner).transfer(addr2.address, ethers.utils.parseEther("500"));
     expect(await ERC_20.balanceOf(addr2.address)).to.equal(ethers.utils.parseEther("500"));
   }
   );
@@ -33,12 +33,6 @@ describe("ERC20", function () {
     expect(await ERC_20.allowance(addr1.address, addr2.address)).to.equal(ethers.utils.parseEther("100"));
   }
   );
-
-  it("Approve with not enough money", async function () {
-    await expect(ERC_20.connect(addr2).approve(addr3.address, ethers.utils.parseEther("750"))).to.be.revertedWith("Not enough tokens");
-  }
-  );
-
 
   it("Transfer from with enough money", async function () {
     await ERC_20.connect(addr2).transferFrom(addr1.address, addr3.address, ethers.utils.parseEther("30"));
